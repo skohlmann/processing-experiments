@@ -1,0 +1,7 @@
+Create animated GIF with
+
+ convert -delay 1.6666 rotated-* rotated.gif
+ 
+ 
+For the `-delay` parameter see https://legacy.imagemagick.org/discourse-server/viewtopic.php?t=14739[convert -delay AND FPS in animated GIF].
+The given value is `100/60 = 1.6666` where `60` defines the FPS (Frames Per Second).
