@@ -1,78 +1,83 @@
 
 class Branch {
-  
-  private final float sizeMultiplier = 0.67;
-  private boolean jitterAngle = false;
-  float angleMultiplier = 1.1;
-  private final float angle = PI / 4;
 
-  public PVector begin;
-  public PVector end;
-  public boolean finished = false;
-  
-  Branch(final PVector begin, final PVector end, float branchAngleMultiplier) {
+  private final float sizeMultiplier = 0.67;
+  private final float branchAngle = PI / 4;
+
+  PVector begin;
+  PVector end;
+  boolean finished = false;
+  int level;
+
+  Branch(final PVector begin, final PVector end, int level) {
     this.begin = begin;
     this.end = end;
-    this.angleMultiplier = branchAngleMultiplier;
-  }
-  
-  void jitterEnd(){
-    end.x += random(-1, 1);
-    end.y += random(-1, 1);
+    this.level = level;
   }
 
-  void jitterAngle(boolean jitter) {
-    this.jitterAngle = jitter;
-  }
-  
   /**
    * displays the Branch
    */
-  void show() {
-    stroke(255);
-    line(begin.x, begin.y, end.x, end.y);
+  public final void show() {
+    drawBranch();
   }
-  
-  Branch firstBranch() {
-    PVector dir = PVector.sub(end, begin);
-    dir.rotate(branchAngle(angle));
+
+  protected void drawBranch() {
+    stroke(branchColor());
+    line(begin().x, begin().y, end().x, end().y);
+  }
+
+  public Branch firstBranch() {
+    PVector dir = PVector.sub(end(), begin());
+    dir.rotate(nextBranchAngle());
     dir.mult(sizeMultiplier);
-    PVector newEnd = PVector.add(end, dir);
-    Branch b = new Branch(end, newEnd, this.angleMultiplier);
+    PVector newEnd = PVector.add(end(), dir);
+    Branch b = new Branch(end(), newEnd, level() + 1);
     this.finished = true;
     return b;
   }
 
-  Branch secondBranch() {
-    PVector dir = PVector.sub(end, begin);
-    dir.rotate(branchAngle(-angle));
+  public Branch secondBranch() {
+    PVector dir = PVector.sub(end(), begin());
+    dir.rotate(-nextBranchAngle());
     dir.mult(sizeMultiplier);
-    PVector newEnd = PVector.add(end, dir);
-    Branch b = new Branch(end, newEnd, this.angleMultiplier);
+    PVector newEnd = PVector.add(end(), dir);
+    Branch b = new Branch(end(), newEnd, level() + 1);
     this.finished = true;
     return b;
   }
-  
-  float branchAngle(float baseAngle) {
-    float multipliedAngle = baseAngle * this.angleMultiplier;
-    if (jitterAngle) {
-      return multipliedAngle * random(0.75, 1.25);
-    }
-    return multipliedAngle;
+
+  protected float nextBranchAngle() {
+    return branchAngle;
+  }
+
+  protected final PVector begin() {
+    return begin;
+  }
+
+  protected final PVector end() {
+    return end;
+  }
+
+  protected color branchColor() {
+    return color(255);
+  }
+
+  int level() {
+    return this.level;
   }
 
   boolean hasLeaf() {
     return !this.finished;
   }
   
-  Leaf leaf() {
-    final Leaf leaf = new Leaf(this.end);
-    leaf.jitterColor(true);
-    leaf.jitterSize(true);
-    return leaf;
+  public boolean canGrow() {
+    return false;
   }
   
+  public void grow() {}
+
   public String toString() {
-    return "Branch - begin: " + this.begin + " - end: " + this.end + " - leaf: " + this.finished;
+    return "Branch - level: " + level + " - begin: " + this.begin + " - end: " + this.end + " - leaf: " + this.finished;
   }
 }
