@@ -21,10 +21,10 @@ class Tree {
       for (int i = branches.size() -1; i >= 0; i--) {
         Branch current = branches.get(i);
         if (current.canGrow()) {
-          current.grow();
+          current.growIfPossible();
         }
         //if the current Branch has no children: add them
-        if(!current.canGrow() && current.hasLeaf()){
+        if (!current.canGrow() && current.hasLeaf()) {
           branches.add(current.firstBranch());
           branches.add(current.secondBranch());
         }
@@ -43,10 +43,11 @@ class Tree {
   void show() {
     ArrayList<Leaf> leaves = new ArrayList();
 
-    for(int i = 0; i < branches.size(); i++){
-      branches.get(i).show();
-      if (branches.get(i).hasLeaf() && branches.get(i).level() > 0) {
-        leaves.add(new Leaf(branches.get(i).end()));
+    for(int i = 0; i < branches.size(); i++) {
+      final Branch branch = branches.get(i);
+      branch.show();
+      if (branch.hasLeaf() && !branch.canGrow() && branch.level() > 0) {
+        leaves.add(new Leaf(branch.end()));
       }
     }
     

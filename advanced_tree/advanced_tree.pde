@@ -8,7 +8,7 @@ final int maxLevel = 9;
 void setup(){
   randomSeed(1);
   size(400,400);
-  this.tree = new Tree(new PVector(width / 2, height)); 
+  this.tree = new Tree(new PVector(width / 2, height - 50)); 
   noLoop();
 }
 
