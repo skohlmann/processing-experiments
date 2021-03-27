@@ -3,6 +3,8 @@ class Branch {
 
   private final float sizeMultiplier = 0.67;
   private final float branchAngle;
+  private final float branchAngleJitterFirst;
+  private final float branchAngleJitterSecond;
 
   PVector begin;
   PVector end;
@@ -19,6 +21,8 @@ class Branch {
     this.end = end;
     this.level = level;
     this.branchAngle = branchAngle;
+    this.branchAngleJitterFirst = random(-0.3, 0.3);
+    this.branchAngleJitterSecond = random(-0.3, 0.3);
   }
 
   /**
@@ -54,7 +58,7 @@ class Branch {
   
   public Branch firstBranch() {
     PVector dir = PVector.sub(end(), begin());
-    dir.rotate(nextBranchAngle());
+    dir.rotate(nextBranchAngle() + branchAngleJitterFirst);
     dir.mult(sizeMultiplier);
     PVector newEnd = PVector.add(end(), dir);
     Branch b = new Branch(end(), newEnd, level() + 1);
@@ -64,7 +68,7 @@ class Branch {
 
   public Branch secondBranch() {
     PVector dir = PVector.sub(end(), begin());
-    dir.rotate(-nextBranchAngle());
+    dir.rotate(-nextBranchAngle() + branchAngleJitterSecond);
     dir.mult(sizeMultiplier);
     PVector newEnd = PVector.add(end(), dir);
     Branch b = new Branch(end(), newEnd, level() + 1);
@@ -110,11 +114,12 @@ class Branch {
   }
   
   protected int growSteps() {
+    final int steps = 25;
     int localLevel = level();
     if (localLevel == 0) {
-      return 8;
+      return steps;
     } else {
-      return 8 / localLevel;
+      return steps / localLevel;
     }
   }
   
@@ -125,6 +130,6 @@ class Branch {
   }
 
   public String toString() {
-    return "Branch - level: " + level + " - begin: " + this.begin + " - end: " + this.end + " - currentGrowStep: " + currentGrowStep + " - leaf: " + this.finished;
+    return "Branch - level: " + level + " - begin: " + this.begin + " - end: " + this.end + " - branchAngle: " + branchAngle + " - branchAngleJitterFirst: " + branchAngleJitterFirst + " - branchAngleJitterSecond: " + branchAngleJitterSecond + " - currentGrowStep: " + currentGrowStep + " - leaf: " + this.finished;
   }
 }
