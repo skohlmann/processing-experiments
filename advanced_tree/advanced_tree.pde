@@ -2,7 +2,7 @@
 
 
 Tree tree;
-final int maxLevel = 9;
+final int maxLevel = 10;
 
 void setup(){
   randomSeed(1);
