@@ -2,20 +2,19 @@
 
 
 Tree tree;
-int count = 0;
 final int maxLevel = 9;
 
 void setup(){
   randomSeed(1);
   size(400,400);
-  this.tree = new Tree(new PVector(width / 2, height - 50)); 
+  this.tree = new Tree(new PVector(width / 2, height));
+  this.tree.grow();
   noLoop();
 }
 
 void mousePressed() {
-  if (count < maxLevel) {
+  if (this.tree.level() < maxLevel) {
     this.tree.grow();
-    count++;
     redraw();
   }
 }

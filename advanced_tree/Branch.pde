@@ -2,7 +2,7 @@
 class Branch {
 
   private final float sizeMultiplier = 0.67;
-  private final float branchAngle = PI / 4;
+  private final float branchAngle;
 
   PVector begin;
   PVector end;
@@ -11,9 +11,14 @@ class Branch {
   int currentGrowStep = 0;
 
   Branch(final PVector begin, final PVector end, int level) {
+    this(begin, end, level, PI / 4);
+  }
+
+  Branch(final PVector begin, final PVector end, int level, float branchAngle) {
     this.begin = begin;
     this.end = end;
     this.level = level;
+    this.branchAngle = branchAngle;
   }
 
   /**
@@ -26,51 +31,27 @@ class Branch {
   protected void drawBranch() {
     stroke(branchColor());
     
-    line(begin().x, begin().y, end().x, end().y);
-
-/*
-    println(begin());
-    println(end());
-    PVector p2 = new PVector(0, 0, 0);
-    PVector.sub(end(), begin(), p2);
-    println("p2: " + p2);
-
-    p2.mult(0.75);
-    PVector p3 = PVector.add(begin(), p2);
-    println("p3: " + p3);
+    println(this);
     
-    PVector beginShift = new PVector(begin().x - 30, begin().y);
-    PVector p3Shift = new PVector(p3.x - 30, p3.y);
-    println("beginShift: " + beginShift);
-    println("p3Shift: " + p3Shift);
-
-    line(beginShift.x, beginShift.y, p3Shift.x, p3Shift.y);
-*/
+    if (canGrow()) {
+      PVector growVector = effectiveEnd();
+      PVector localBegin = begin();
+      line(localBegin.x, localBegin.y, growVector.x, growVector.y);
+    } else {    
+      line(begin().x, begin().y, end().x, end().y);
+    }
+  }
+  
+  float calculateGrowPercentage(int growStep, int growSteps) {
+    return 1f / (float) growSteps * (float) growStep;
   }
   
   PVector lengthFromBegin(PVector begin, PVector end, float lengthPercentage) {
-    float realPercent = adjustNormalizedPercent(normalizePercent(lengthPercentage));
     PVector p1 = PVector.sub(end, begin);
-    p1.mult(realPercent);
-    return PVector.add(begin(), p1);
+    p1.mult(lengthPercentage);
+    return PVector.add(begin, p1);
   }
   
-  float adjustNormalizedPercent(final float percent) {
-    if (percent > 1) {
-      return 1f;
-    } else if (percent < -1) {
-      return -1;
-    }
-    return percent;
-  }
-  
-  float normalizePercent(final float percent) {
-    if (percent > 1 || percent < -1) {
-      return percent / 100;
-    }
-    return percent;
-  }
-
   public Branch firstBranch() {
     PVector dir = PVector.sub(end(), begin());
     dir.rotate(nextBranchAngle());
@@ -98,6 +79,15 @@ class Branch {
   protected final PVector begin() {
     return begin;
   }
+  
+  public PVector effectiveEnd() {
+    if (canGrow()) {
+      float growPercentage = calculateGrowPercentage(currentGrowStep, growSteps());
+      PVector localBegin = begin();
+      return lengthFromBegin(localBegin, end(), growPercentage);
+    }
+    return end();
+  }
 
   protected final PVector end() {
     return end;
@@ -111,16 +101,21 @@ class Branch {
     return this.level;
   }
 
-  boolean hasLeaf() {
-    return !this.finished;
+  boolean isFinished() {
+    return this.finished;
   }
   
   public boolean canGrow() {
-    return growSteps() != currentGrowStep;
+    return growSteps() > currentGrowStep;
   }
   
   protected int growSteps() {
-    return 4;
+    int localLevel = level();
+    if (localLevel == 0) {
+      return 8;
+    } else {
+      return 8 / localLevel;
+    }
   }
   
   public void growIfPossible() {
@@ -130,6 +125,6 @@ class Branch {
   }
 
   public String toString() {
-    return "Branch - level: " + level + " - begin: " + this.begin + " - end: " + this.end + " - leaf: " + this.finished;
+    return "Branch - level: " + level + " - begin: " + this.begin + " - end: " + this.end + " - currentGrowStep: " + currentGrowStep + " - leaf: " + this.finished;
   }
 }

@@ -4,6 +4,7 @@ class Tree {
   PVector begin;
   float maxTrunkLength;
   ArrayList<Branch> branches = new ArrayList<Branch>();
+  private int level;
   
   Tree(final PVector begin) {
     this(begin, 100);
@@ -20,16 +21,20 @@ class Tree {
     } else {
       for (int i = branches.size() -1; i >= 0; i--) {
         Branch current = branches.get(i);
-        if (current.canGrow()) {
-          current.growIfPossible();
-        }
+        current.growIfPossible();
         //if the current Branch has no children: add them
-        if (!current.canGrow() && current.hasLeaf()) {
-          branches.add(current.firstBranch());
+        if (!current.canGrow() && !current.isFinished()) {
+          Branch first = current.firstBranch();
+          this.level = first.level();
+          branches.add(first);
           branches.add(current.secondBranch());
         }
       }
     }
+  }
+  
+  public final int level() {
+    return level;
   }
 
   protected Branch trunk() {
@@ -46,8 +51,8 @@ class Tree {
     for(int i = 0; i < branches.size(); i++) {
       final Branch branch = branches.get(i);
       branch.show();
-      if (branch.hasLeaf() && !branch.canGrow() && branch.level() > 0) {
-        leaves.add(new Leaf(branch.end()));
+      if (!branch.isFinished() && branch.level() != 0) {
+        leaves.add(new Leaf(branch.effectiveEnd()));
       }
     }
     
