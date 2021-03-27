@@ -1,0 +1,9 @@
+Create animated GIF with
+
+ convert -delay 5 -loop 1 growing-tree-0* growing-tree.gif
+ 
+ 
+For the `-delay` parameter see https://legacy.imagemagick.org/discourse-server/viewtopic.php?t=14739[convert -delay AND FPS in animated GIF].
+The given value is `100/20 = 5` where `20` defines the FPS (Frames Per Second).
+
+The `-delay` parameter defines a single run of the animation.

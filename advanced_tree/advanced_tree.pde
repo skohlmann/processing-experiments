@@ -16,6 +16,7 @@ void mousePressed() {
   if (this.tree.level() < maxLevel) {
     this.tree.grow();
     redraw();
+    saveFrame("growing-tree-###.png");
   }
 }
 
