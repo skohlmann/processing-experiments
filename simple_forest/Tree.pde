@@ -10,8 +10,8 @@ class Tree {
   private int level;
   private final HashMap<String, TreeGrowListener> treeGrowListener = new HashMap<String, TreeGrowListener>();
   
-  Tree(final PVector begin) {
-    this("default", begin, new TreeConfiguration());
+  Tree(final String name, final PVector begin) {
+    this(name, begin, new TreeConfiguration());
   }
 
   Tree(final String name, final PVector begin, final TreeConfiguration treeConfig) {
@@ -72,8 +72,7 @@ class Tree {
   }
 
   protected Branch trunk() {
-    PVector end = new PVector(this.begin.x + treeConfig().endAdjustmentX(), this.begin.y - treeConfig.maxTrunkLength());
-    return new Branch(this.begin, end, 0, branchConfig());
+    return new Branch(this.begin, treeConfig.maxTrunkLength(), treeConfig.trunkAngle() + 270, 0, branchConfig());
   }
   
   void show() {

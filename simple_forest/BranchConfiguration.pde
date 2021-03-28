@@ -3,7 +3,7 @@
 class BranchConfiguration {
   
   private float sizeMultiplier;
-  private float branchAngle;
+  private float aditionalNextBranchAngle;
   private float leftBranchAngleJitterLowBoundry;
   private float leftBranchAngleJitterHightBoundry;
   private float rightBranchAngleJitterLowBoundry;
@@ -14,7 +14,7 @@ class BranchConfiguration {
   
   public BranchConfiguration() {
     this.sizeMultiplier = 0.67;
-    this.branchAngle = 45;
+    this.aditionalNextBranchAngle = 45;
     this.leftBranchAngleJitterLowBoundry = -0.3;
     this.leftBranchAngleJitterHightBoundry = 0.3;
     this.rightBranchAngleJitterLowBoundry = -0.3;
@@ -32,12 +32,12 @@ class BranchConfiguration {
     return this.sizeMultiplier;
   }
   
-  public void setBranchAngle(final float degrees) {
-    this.branchAngle = degrees;
+  public void setAditionalNextBranchAngle(final float degrees) {
+    this.aditionalNextBranchAngle = degrees;
   }
   
-  protected float branchAngle() {
-    return this.branchAngle;
+  protected float aditionalNextBranchAngle() {
+    return this.aditionalNextBranchAngle;
   }
   
   public void setLeftBranchAngleJitterLowBoundry(final float leftBranchAngleJitterLowBoundry) {
@@ -94,13 +94,5 @@ class BranchConfiguration {
   
   public int growSteps() {
     return this.growSteps;
-  }
-  
-  public final float branchAngleDegrees() {
-    return branchAngle();
-  }
-
-  public final float branchAngleRadians() {
-    return radians(branchAngle());
-  }
+  }  
 }

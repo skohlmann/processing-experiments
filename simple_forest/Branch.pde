@@ -6,18 +6,20 @@ class Branch {
   private final BranchConfiguration branchConfig;
 
   final PVector begin;
-  final PVector end;
+  final float distance;
+  final float branchAngle;
   boolean finished = false;
   int level;
   int currentGrowStep = 0;
 
-  Branch(final PVector begin, final PVector end, int level) {
-    this(begin, end, level, new BranchConfiguration());
+  Branch(final PVector begin, final float distance, final float branchAngle, int level) {
+    this(begin, distance, branchAngle, level, new BranchConfiguration());
   }
 
-  Branch(final PVector begin, final PVector end, int level, BranchConfiguration branchConfig) {
+  Branch(final PVector begin, final float distance, final float branchAngle, int level, BranchConfiguration branchConfig) {
     this.begin = begin;
-    this.end = end;
+    this.distance = distance;
+    this.branchAngle = branchAngle;
     this.level = level;
     this.branchAngleJitterFirst = random(branchConfig.leftBranchAngleJitterLowBoundry(), branchConfig.leftBranchAngleJitterHightBoundry());
     this.branchAngleJitterSecond = random(branchConfig.rightBranchAngleJitterLowBoundry(), branchConfig.rightBranchAngleJitterHightBoundry());
@@ -40,42 +42,41 @@ class Branch {
       PVector growVector = effectiveEnd();
       PVector localBegin = begin();
       line(localBegin.x, localBegin.y, growVector.x, growVector.y);
-    } else {    
+    } else {
       line(begin().x, begin().y, end().x, end().y);
     }
     pop();
   }
   
   public Branch firstBranch() {
-    PVector dir = PVector.sub(end(), begin());
-    dir.rotate(nextBranchAngle() + branchAngleJitterFirst);
-    dir.mult(this.branchConfig().sizeMultiplier());
-    PVector newEnd = PVector.add(end(), dir);
-    Branch b = newBranch(end(), newEnd);
+    float nextBranchAngle = branchAngle() + this.branchConfig().aditionalNextBranchAngle() + branchAngleJitterFirst;
+    float nextDistance = distance() * this.branchConfig().sizeMultiplier();
+    Branch b = newBranch(end(), nextDistance, nextBranchAngle);
     this.finished = true;
     return b;
   }
 
   public Branch secondBranch() {
-    PVector dir = PVector.sub(end(), begin());
-    dir.rotate(-nextBranchAngle() + branchAngleJitterSecond);
-    dir.mult(branchConfig().sizeMultiplier());
-    PVector newEnd = PVector.add(end(), dir);
-    Branch b = newBranch(end(), newEnd);
+    float nextBranchAngle = branchAngle() - this.branchConfig().aditionalNextBranchAngle() + branchAngleJitterSecond;
+    float nextDistance = distance() * this.branchConfig().sizeMultiplier();
+    Branch b = newBranch(end(), nextDistance, nextBranchAngle);
     this.finished = true;
     return b;
-  }
-
-  protected float nextBranchAngle() {
-    return this.branchConfig().branchAngleRadians();
   }
 
   protected final PVector begin() {
     return begin;
   }
   
-  protected Branch newBranch(PVector begin, PVector end) {
-    return new Branch(begin, end, level() + 1, branchConfig());
+  protected Branch newBranch(PVector begin, final float distance, final float branchAngle) {
+    return new Branch(begin, distance, branchAngle, level() + 1, branchConfig());
+  }
+  
+  protected PVector end() {
+    PVector lb = begin();
+    float ld = distance();
+    float lba = branchAngle();
+    return new PVector(ld * cos(radians(lba)) + lb.x, ld * sin(radians(lba)) + lb.y);
   }
   
   public PVector effectiveEnd() {
@@ -95,10 +96,6 @@ class Branch {
     PVector p1 = PVector.sub(end, begin);
     p1.mult(lengthPercentage);
     return PVector.add(begin, p1);
-  }
-
-  protected final PVector end() {
-    return end;
   }
 
   int level() {
@@ -131,5 +128,13 @@ class Branch {
   
   public BranchConfiguration branchConfig() {
     return this.branchConfig;
+  }
+  
+  public float distance() {
+    return this.distance;
+  }
+  
+  public float branchAngle() {
+    return this.branchAngle;
   }
 }

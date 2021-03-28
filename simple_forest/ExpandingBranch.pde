@@ -5,15 +5,15 @@ class ExpandingBranch extends Branch {
   private int expandStep;
   private float increaseAngle;
   
-  public ExpandingBranch(final PVector begin, final PVector end, int level, ExpandingBranchConfiguration branchConfig) {
-    this(begin, end, level, branchConfig, 0);
+  public ExpandingBranch(final PVector begin, final float distance, final float branchAngle, int level, ExpandingBranchConfiguration branchConfig) {
+    this(begin, distance, branchAngle, level, branchConfig, 0);
   }
 
-  private ExpandingBranch(final PVector begin, final PVector end, int level, ExpandingBranchConfiguration branchConfig, int expandStep) {
-    super(begin, end, level, branchConfig);
+  private ExpandingBranch(final PVector begin, final float distance, final float branchAngle, int level, ExpandingBranchConfiguration branchConfig, int expandStep) {
+    super(begin, distance, branchAngle, level, branchConfig);
     this.expandStep = expandStep;
     
-    this.increaseAngle = (branchConfig.branchAngleDegrees() - branchConfig.startBranchAngleDegrees()) / branchConfig.expandingSteps();
+//    this.increaseAngle = (branchConfig.branchAngleDegrees() - branchConfig.startBranchAngleDegrees()) / branchConfig.expandingSteps();
   }
 
   protected final float nextBranchAngle() {
@@ -21,7 +21,7 @@ class ExpandingBranch extends Branch {
   }
 
   protected boolean canExpand() {
-    
+/*    
     boolean isStartLevel = level() >= branchConfig().expandingStartLevel();
     boolean isGreaterDegrees = effectiveAngle() <= branchConfig().branchAngleDegrees();
     boolean isSmalerMaxExpandsSteps = branchConfig().expandingSteps() >= expandStep;
@@ -32,6 +32,8 @@ class ExpandingBranch extends Branch {
     println("isSmalerMaxExpandsSteps: " + isSmalerMaxExpandsSteps + " - expandingSteps(): " + branchConfig().expandingSteps() + " - expandStep: " + expandStep + "\n");
     
     return isStartLevel && (isGreaterDegrees || isSmalerMaxExpandsSteps);
+*/
+    return true;
   }
   
   private float effectiveAngle() {
@@ -46,11 +48,11 @@ class ExpandingBranch extends Branch {
       expandStep++;
     }
   }
-  
+/*  
   protected Branch newBranch(PVector begin, PVector end) {
     return new ExpandingBranch(begin, end, level() + 1, branchConfig(), expandStep);
   }
-  
+*/  
   public ExpandingBranchConfiguration branchConfig() {
     return (ExpandingBranchConfiguration) super.branchConfig();
   }

@@ -3,11 +3,11 @@
 class TreeConfiguration {
   
   private float maxTrunkLength;
-  private float endAdjustmentX;
+  private float trunkAngle;
   
   public TreeConfiguration() {
     this.maxTrunkLength = 100;
-    this.endAdjustmentX = 0;
+    this.trunkAngle = 10;
   }
   
   public void setMaxTrunkLength(final float maxTrunkLength) {
@@ -18,11 +18,11 @@ class TreeConfiguration {
     return this.maxTrunkLength;
   }
   
-  public void setEndAdjustmentX(final float endAdjustmentX) {
-    this.endAdjustmentX = endAdjustmentX;
+  public void setTrunkAngle(final float trunkAngle) {
+    this.trunkAngle = trunkAngle;
   }
 
-  public float endAdjustmentX() {
-    return this.endAdjustmentX;
+  public float trunkAngle() {
+    return this.trunkAngle;
   }
 }

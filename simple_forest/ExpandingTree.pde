@@ -7,7 +7,8 @@ class ExpandingTree extends Tree {
   }
 
   protected Branch trunk() {
-    PVector end = new PVector(this.begin.x + treeConfig().endAdjustmentX(), this.begin.y - treeConfig.maxTrunkLength());
-    return new ExpandingBranch(this.begin, end, 0, (ExpandingBranchConfiguration) branchConfig());
+    return null;
+//    PVector end = new PVector(this.begin.x + treeConfig().endAdjustmentX(), this.begin.y - treeConfig.maxTrunkLength());
+//    return new ExpandingBranch(this.begin, end, 0, (ExpandingBranchConfiguration) branchConfig());
   }
 }
