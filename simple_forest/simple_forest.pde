@@ -7,8 +7,9 @@ void setup(){
   randomSeed(1);
   size(1200, 400);
   final TreeConfiguration treeConfig = new TreeConfiguration();
-  treeConfig.setEndAdjustmentX(10);
-  this.tree = new Tree("default", new PVector(width / 2, height), treeConfig);
+  final BranchConfiguration branchConfig = new BranchConfiguration();
+  final LeafConfiguration leafConfig = new LeafConfiguration();
+  this.tree = new Tree("default", new PVector(width / 3, height), treeConfig, branchConfig, leafConfig);
   this.tree.registerTreeGrowListener(new PrintTreeGrowListener());
   this.tree.grow();
   noLoop();

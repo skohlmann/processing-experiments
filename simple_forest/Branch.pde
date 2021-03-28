@@ -33,8 +33,8 @@ class Branch {
 
   protected void drawBranch() {
     push();
-    stroke(branchConfig.branchColor());
-    strokeWeight(branchConfig.branchWeight());
+    stroke(branchConfig().branchColor());
+    strokeWeight(branchConfig().branchWeight());
     
     if (canGrow()) {
       PVector growVector = effectiveEnd();
@@ -46,22 +46,12 @@ class Branch {
     pop();
   }
   
-  float calculateGrowPercentage(int growStep, int growSteps) {
-    return 1f / (float) growSteps * (float) growStep;
-  }
-  
-  PVector lengthFromBegin(PVector begin, PVector end, float lengthPercentage) {
-    PVector p1 = PVector.sub(end, begin);
-    p1.mult(lengthPercentage);
-    return PVector.add(begin, p1);
-  }
-  
   public Branch firstBranch() {
     PVector dir = PVector.sub(end(), begin());
     dir.rotate(nextBranchAngle() + branchAngleJitterFirst);
-    dir.mult(this.branchConfig.sizeMultiplier());
+    dir.mult(this.branchConfig().sizeMultiplier());
     PVector newEnd = PVector.add(end(), dir);
-    Branch b = new Branch(end(), newEnd, level() + 1);
+    Branch b = newBranch(end(), newEnd);
     this.finished = true;
     return b;
   }
@@ -69,19 +59,23 @@ class Branch {
   public Branch secondBranch() {
     PVector dir = PVector.sub(end(), begin());
     dir.rotate(-nextBranchAngle() + branchAngleJitterSecond);
-    dir.mult(this.branchConfig.sizeMultiplier());
+    dir.mult(branchConfig().sizeMultiplier());
     PVector newEnd = PVector.add(end(), dir);
-    Branch b = new Branch(end(), newEnd, level() + 1);
+    Branch b = newBranch(end(), newEnd);
     this.finished = true;
     return b;
   }
 
   protected float nextBranchAngle() {
-    return this.branchConfig.branchAngle();
+    return this.branchConfig().branchAngleRadians();
   }
 
   protected final PVector begin() {
     return begin;
+  }
+  
+  protected Branch newBranch(PVector begin, PVector end) {
+    return new Branch(begin, end, level() + 1, branchConfig());
   }
   
   public PVector effectiveEnd() {
@@ -91,6 +85,16 @@ class Branch {
       return lengthFromBegin(localBegin, end(), growPercentage);
     }
     return end();
+  }
+
+  float calculateGrowPercentage(int growStep, int growSteps) {
+    return 1f / (float) growSteps * (float) growStep;
+  }
+  
+  PVector lengthFromBegin(PVector begin, PVector end, float lengthPercentage) {
+    PVector p1 = PVector.sub(end, begin);
+    p1.mult(lengthPercentage);
+    return PVector.add(begin, p1);
   }
 
   protected final PVector end() {
@@ -110,7 +114,7 @@ class Branch {
   }
   
   protected int growSteps() {
-    final int steps = branchConfig.growSteps();
+    final int steps = branchConfig().growSteps();
     int localLevel = level();
     if (localLevel == 0) {
       return steps;
@@ -125,7 +129,7 @@ class Branch {
     }
   }
   
-  public final BranchConfiguration branchConfig() {
+  public BranchConfiguration branchConfig() {
     return this.branchConfig;
   }
 }

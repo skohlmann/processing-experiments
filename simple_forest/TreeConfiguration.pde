@@ -7,11 +7,11 @@ class TreeConfiguration {
   
   public TreeConfiguration() {
     this.maxTrunkLength = 100;
+    this.endAdjustmentX = 0;
   }
   
   public void setMaxTrunkLength(final float maxTrunkLength) {
     this.maxTrunkLength = maxTrunkLength;
-    this.endAdjustmentX = 0;
   }
   
   public float maxTrunkLength() {

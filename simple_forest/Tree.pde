@@ -19,7 +19,11 @@ class Tree {
   }
 
   Tree(final String name, final PVector begin, final TreeConfiguration treeConfig, BranchConfiguration branchConfig) {
-    this(name, begin, treeConfig, new BranchConfiguration(), new LeafConfiguration());
+    this(name, begin, treeConfig, branchConfig, new LeafConfiguration());
+  }
+
+  Tree(final String name, final PVector begin, final TreeConfiguration treeConfig, LeafConfiguration leafConfiguration) {
+    this(name, begin, treeConfig, new BranchConfiguration(), leafConfiguration);
   }
 
   Tree(final String name, final PVector begin, final TreeConfiguration treeConfig, BranchConfiguration branchConfig, LeafConfiguration leafConfiguration) {

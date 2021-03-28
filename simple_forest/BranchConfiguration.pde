@@ -14,7 +14,7 @@ class BranchConfiguration {
   
   public BranchConfiguration() {
     this.sizeMultiplier = 0.67;
-    this.branchAngle = PI / 4;
+    this.branchAngle = 45;
     this.leftBranchAngleJitterLowBoundry = -0.3;
     this.leftBranchAngleJitterHightBoundry = 0.3;
     this.rightBranchAngleJitterLowBoundry = -0.3;
@@ -32,11 +32,11 @@ class BranchConfiguration {
     return this.sizeMultiplier;
   }
   
-  public void setBranchAngle(final float branchAngle) {
-    this.branchAngle = branchAngle;
+  public void setBranchAngle(final float degrees) {
+    this.branchAngle = degrees;
   }
   
-  public float branchAngle() {
+  protected float branchAngle() {
     return this.branchAngle;
   }
   
@@ -94,5 +94,13 @@ class BranchConfiguration {
   
   public int growSteps() {
     return this.growSteps;
+  }
+  
+  public final float branchAngleDegrees() {
+    return branchAngle();
+  }
+
+  public final float branchAngleRadians() {
+    return radians(branchAngle());
   }
 }
