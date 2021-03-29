@@ -15,10 +15,10 @@ class BranchConfiguration {
   public BranchConfiguration() {
     this.sizeMultiplier = 0.67;
     this.aditionalNextBranchAngle = 45;
-    this.leftBranchAngleJitterLowBoundry = -0.3;
-    this.leftBranchAngleJitterHightBoundry = 0.3;
-    this.rightBranchAngleJitterLowBoundry = -0.3;
-    this.rightBranchAngleJitterHightBoundry = 0.3;
+    this.leftBranchAngleJitterLowBoundry = -15;
+    this.leftBranchAngleJitterHightBoundry = 15;
+    this.rightBranchAngleJitterLowBoundry = -15;
+    this.rightBranchAngleJitterHightBoundry = 15;
     this.branchColor = color(51);
     this.branchWeight = 1;
     this.growSteps = 25;

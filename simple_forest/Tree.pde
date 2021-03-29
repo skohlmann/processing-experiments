@@ -43,7 +43,7 @@ class Tree {
         Branch current = branches.get(i);
         current.growIfPossible();
         //if the current Branch has no children: add them
-        if (!current.canGrow() && !current.isFinished()) {
+        if (canGrow() && !current.canGrow() && !current.isFinished()) {
           Branch first = current.firstBranch();
           this.level = first.level();
           branches.add(first);
@@ -56,6 +56,10 @@ class Tree {
     }
   }
   
+  boolean canGrow() {
+    return level() <= treeConfig.maxLevel();
+  }
+ 
   private void fireTreeGrowEvent() {
     TreeGrowEvent event = new TreeGrowEvent(name(), level());
     for (TreeGrowListener listener : this.treeGrowListener.values()) {
@@ -72,7 +76,11 @@ class Tree {
   }
 
   protected Branch trunk() {
-    return new Branch(this.begin, treeConfig.maxTrunkLength(), treeConfig.trunkAngle() + 270, 0, branchConfig());
+    return new Branch(this.begin, treeConfig.maxTrunkLength(), effectiveAngle(), 0, branchConfig());
+  }
+  
+  protected final float effectiveAngle() {
+    return treeConfig.trunkAngle() + 270;
   }
   
   void show() {
@@ -82,7 +90,7 @@ class Tree {
       final Branch branch = branches.get(i);
       branch.show();
       if (!branch.isFinished() && branch.level() != 0) {
-        leaves.add(newLeaf(branch.effectiveEnd()));
+        leaves.add(newLeaf(branch.end()));
       }
     }
     

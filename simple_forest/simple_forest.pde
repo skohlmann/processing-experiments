@@ -1,7 +1,6 @@
 
 
-Tree tree;
-final int maxLevel = 10;
+ArrayList<Tree> trees = new ArrayList<Tree>();
 
 void setup(){
   randomSeed(1);
@@ -9,26 +8,30 @@ void setup(){
   final TreeConfiguration treeConfig = new TreeConfiguration();
   final BranchConfiguration branchConfig = new BranchConfiguration();
   final LeafConfiguration leafConfig = new LeafConfiguration();
-  this.tree = new Tree("default", new PVector(width / 3, height), treeConfig, branchConfig, leafConfig);
-  this.tree.registerTreeGrowListener(new PrintTreeGrowListener());
-  this.tree.grow();
+  Tree tree = new Tree("default", new PVector(width / 3, height), treeConfig, branchConfig, leafConfig);
+  tree.registerTreeGrowListener(new PrintTreeGrowListener());
+  trees.add(tree);
   noLoop();
 }
 
 void mousePressed() {
-  if (this.tree.level() < maxLevel) {
-    this.tree.grow();
-    redraw();
-//    saveFrame("growing-tree-###.png");
+  for (Tree tree : trees) {
+    if (tree.canGrow()) {
+      tree.grow();
+    }
   }
+  redraw();
+//  saveFrame("growing-tree-###.png");
 }
 
 /**
 * Displays the Tree
 */
-void draw(){
+void draw() {
   background(255, 228, 149);
-  this.tree.show();
+  for (Tree tree : trees) {
+    tree.show();
+  }
 }
 
 class PrintTreeGrowListener implements TreeGrowListener {

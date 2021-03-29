@@ -18,12 +18,12 @@ class Leaf {
   }
 
   protected void drawLeaf() {
-    push();
+    pushStyle();
     fill(leafConfig.leafColor(), leafConfig.leafColorAlpha());
     noStroke();
     final PVector leafSize = leafSize();
     ellipse(at.x, at.y, leafSize.x, leafSize.y);
-    pop();
+    popStyle();
   }
 
   protected PVector leafSize() {
