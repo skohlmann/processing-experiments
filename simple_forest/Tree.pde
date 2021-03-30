@@ -61,7 +61,7 @@ class Tree {
   }
  
   private void fireTreeGrowEvent() {
-    TreeGrowEvent event = new TreeGrowEvent(name(), level());
+    TreeGrowEvent event = new TreeGrowEvent(name(), true, level());
     for (TreeGrowListener listener : this.treeGrowListener.values()) {
       listener.onTreeGrow(event);
     }
