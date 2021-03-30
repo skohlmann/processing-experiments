@@ -1,0 +1,9 @@
+# Simple forest
+
+A very simple, hard coded growing forest.
+
+Starting the code in the https://processing.org/[Processing] environment generates a bunch of PNG files. 
+Merge the PNG files into an animated GIF using http://www.imagemagick.org[ImageMagick].
+See `buildGif.sh`
+
+image::the_forest.gif[]
